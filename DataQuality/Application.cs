@@ -32,7 +32,10 @@ namespace DataQuality
 
             // Hämta Orders
             var filepathOrders = "..\\..\\..\\OriginalDataInExcel\\Orders.csv";
-            var orders = loadCustomers.ReadCustomers(filepathOrders);
+            var orders = loadCustomers.ReadOrders(filepathOrders);
+
+            // Quality Checks
+
         }
     }
 }
