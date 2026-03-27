@@ -8,6 +8,7 @@ namespace DataQuality
     {
         public void Run()
         {
+            // Skapa databasen
             var builder = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.json", true, true);
             var config = builder.Build();
@@ -21,6 +22,14 @@ namespace DataQuality
                 var dataInitiaizer = new DataInitializer();
                 dataInitiaizer.MigrateAndSeed(dbContext);
             }
+
+            // Hämta Customers
+            var filepathCustomers = "..\\..\\..\\OriginalDataInExcel\\Customers.csv";
+            var customers = File.ReadAllLines(filepathCustomers);
+
+            // Hämta Orders
+            var filepathOrders = "..\\..\\..\\OriginalDataInExcel\\Orders.csv";
+            var orders = File.ReadAllLines(filepathOrders);
         }
     }
 }
