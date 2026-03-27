@@ -9,6 +9,7 @@
         public string Currency { get; set; }
         public string Status { get; set; }
         public string ShippingAddress { get; set; }
+        public string City { get; set; }
 
         // Navigeringsegenskap tillbaka till kunden
         public Customer Customer { get; set; }

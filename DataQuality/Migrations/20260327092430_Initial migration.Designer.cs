@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataQuality.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260327090808_Initial migration")]
+    [Migration("20260327092430_Initial migration")]
     partial class Initialmigration
     {
         /// <inheritdoc />
@@ -71,6 +71,10 @@ namespace DataQuality.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Currency")
                         .IsRequired()
