@@ -2,7 +2,7 @@
 
 namespace DataQuality.Services
 {
-    public class QualityChecks
+    public class DuplicateChecksId
     {
         public void CheckForDuplicateIds(List<Customer> customers, List<Order> orders)
         {
