@@ -36,6 +36,8 @@ namespace DataQuality
 
             // Quality Checks
 
+            // Kontrollera Id dubbletter i både tabeller
+            new QualityChecks().CheckForDuplicateIds(customers, orders);
         }
     }
 }
