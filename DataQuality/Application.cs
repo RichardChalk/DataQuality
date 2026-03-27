@@ -1,4 +1,5 @@
 ﻿using DataQuality.Data;
+using DataQuality.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -24,12 +25,14 @@ namespace DataQuality
             }
 
             // Hämta Customers
+            var loadCustomers = new LoadInitialData();
+            
             var filepathCustomers = "..\\..\\..\\OriginalDataInExcel\\Customers.csv";
-            var customers = File.ReadAllLines(filepathCustomers);
+            var customers = loadCustomers.ReadCustomers(filepathCustomers);
 
             // Hämta Orders
             var filepathOrders = "..\\..\\..\\OriginalDataInExcel\\Orders.csv";
-            var orders = File.ReadAllLines(filepathOrders);
+            var orders = loadCustomers.ReadCustomers(filepathOrders);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DataQuality.Services
             // Startar på 1 för att hoppa över rubrikerna (index 0)
             for (int i = 1; i < lines.Length; i++)
             {
-                var columns = lines[i].Split('\t');
+                var columns = lines[i].Split(';');
                 if (columns.Length >= 7)
                 {
                     customers.Add(new Customer
@@ -37,7 +37,7 @@ namespace DataQuality.Services
 
             for (int i = 1; i < lines.Length; i++)
             {
-                var columns = lines[i].Split('\t');
+                var columns = lines[i].Split(';');
                 if (columns.Length >= 8)
                 {
                     orders.Add(new Order
