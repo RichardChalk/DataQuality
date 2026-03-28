@@ -15,33 +15,40 @@ namespace DataQuality.Data
         {
             if (!dbContext.Customers.Any())
             {
-                Console.WriteLine("Databasen är tom. Påbörjar länkning av data...");
+                Console.WriteLine("Databasen är tom. Påbörjar länkning och import...");
 
-                // 1. Tvätta kunddatan (ta bort dubbletter baserat på CSV-ID)
+                // 1. Unika kunder
                 var uniqueCustomers = customersCleaned.DistinctBy(c => c.CustomerId).ToList();
 
-                // 2. Länka ihop ordrar med rätt kund-objekt
+                // 2. Länka ordrar och rensa bort de som saknar kund (Referensintegritet)
                 foreach (var order in ordersCleaned)
                 {
-                    // Hitta kunden i vår lista som har samma ID som i order-filen
                     var matchingCustomer = uniqueCustomers.FirstOrDefault(c => c.CustomerId == order.CustomerId);
 
                     if (matchingCustomer != null)
                     {
-                        // Genom att sätta objekt-referensen 'Customer' istället för 'CustomerId' (int)
-                        // så sköter EF all ID-matchning åt oss i bakgrunden.
                         order.Customer = matchingCustomer;
+                        // Vi nollställer CustomerId-int-värdet så att EF använder objekt-kopplingen istället
+                        order.CustomerId = 0;
                     }
                 }
 
-                // 3. Lägg till kunderna. Eftersom ordrarna nu är länkade till kunderna 
-                // i minnet, kommer EF att förstå att de ska sparas tillsammans.
-                dbContext.Customers.AddRange(uniqueCustomers);
+                // Filtrera ut endast de ordrar som faktiskt fick en matchande kund
+                var validOrders = ordersCleaned.Where(o => o.Customer != null).ToList();
 
-                // Vi behöver inte köra AddRange på ordersCleaned separat, EF hittar dem via navigeringen.
+                // 3. Spara till databasen
+                dbContext.Customers.AddRange(uniqueCustomers);
+                dbContext.Orders.AddRange(validOrders);
 
                 dbContext.SaveChanges();
-                Console.WriteLine($"Klart! Importerade {uniqueCustomers.Count} kunder och deras tillhörande ordrar.");
+                Console.WriteLine($"Succé! Importerade {uniqueCustomers.Count} kunder och {validOrders.Count} ordrar.");
+
+                // Bonus: Berätta om vi kastade bort några trasiga ordrar
+                int orphanedOrders = ordersCleaned.Count - validOrders.Count;
+                if (orphanedOrders > 0)
+                {
+                    Console.WriteLine($"OBS: {orphanedOrders} ordrar kastades p.g.a. saknad kundkoppling.");
+                }
             }
         }
     }

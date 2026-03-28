@@ -116,15 +116,16 @@ namespace DataQuality
             // Populate Database
 
             // Efter att ha kört alla kvalitetskontroller och manuellt "rättat" datan, kan vi nu ladda in den i databasen.
+            // Jag rensade datan manuellt efter mn rapport och skapade nya "cleaned" csv filer,
             // I en "riktig" app skulle vi ha en process för att "rätta" datan automatiskt, innan den laddas in i databasen.
 
-            // Hämta Customers
+            // Hämta "Cleaned" Customers
             var loadCustomersCleaned = new LoadInitialData();
 
             var filepathCustomersCleaned = "..\\..\\..\\OriginalDataInExcel\\CustomersCleaned.csv";
             var customersCleaned = loadCustomers.ReadCustomers(filepathCustomersCleaned);
 
-            // Hämta Orders
+            // Hämta "Cleaned" Orders
             var filepathOrdersCleaned = "..\\..\\..\\OriginalDataInExcel\\OrdersCleaned.csv";
             var ordersCleaned = loadCustomers.ReadOrders(filepathOrdersCleaned);
 
