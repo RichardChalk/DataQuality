@@ -1,8 +1,12 @@
-﻿namespace DataQuality.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataQuality.Models
 {
     public class Customer
     {
-        public int CustomerId { get; set; } // Blir automatiskt Primary Key
+        [Key]
+        public int SQLId { get; set; }// Blir automatiskt Primary Key i SQL
+        public int CustomerId { get; set; } 
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

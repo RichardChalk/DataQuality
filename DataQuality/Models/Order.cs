@@ -1,8 +1,12 @@
-﻿namespace DataQuality.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataQuality.Models
 {
     public class Order
     {
-        public int OrderId { get; set; } // Primary Key
+        [Key]
+        public int SQLId { get; set; }// Blir automatiskt Primary Key i SQL
+        public int OrderId { get; set; }
         public int CustomerId { get; set; } // Foreign Key
         public string OrderDate { get; set; }
         public decimal Amount { get; set; }

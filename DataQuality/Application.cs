@@ -29,7 +29,7 @@ namespace DataQuality
             using (var dbContext = new AppDbContext(options.Options))
             {
                 var dataInitiaizer = new DataInitializer();
-                dataInitiaizer.MigrateAndSeed(dbContext);
+                dataInitiaizer.MigrateDatabase(dbContext);
             }
 
             // ====================================================================
@@ -57,7 +57,7 @@ namespace DataQuality
             // Kontrollera att identifierare är unika.
             // Detta är den kontroll vi precis skrev kod för.
 
-            // Check: Finns det flera kunder med samma CustomerId?
+            // Check: Finns det flera kunder med samma CustomerUniqueId?
             // I vår data: Anna Andersson(ID 101) förekommer två gånger.
             // Diskussion: Ska man radera dubbletten, eller uppdatera den befintliga raden?
 
@@ -68,7 +68,7 @@ namespace DataQuality
             // 2.Referensintegritet(Referential Integrity)
             // Kontrollera att kopplingar mellan tabeller stämmer.
             // Check: Har alla rader i Orders.csv en motsvarande Customer i Customers.csv?
-            // I vår data: Order 5004 tillhör CustomerId 999, men kund 999 finns inte i kundlistan.
+            // I vår data: Order 5004 tillhör CustomerUniqueId 999, men kund 999 finns inte i kundlistan.
             //Diskussion: Vad händer om vi försöker spara en order utan kund i en SQL - databas med Foreign Keys ? (Det kraschar).
 
             // Kontrollera Id dubbletter i både tabeller
@@ -111,6 +111,28 @@ namespace DataQuality
 
             new Accuracy().CheckAccuracy(orders);
             Console.WriteLine("================================================");
+
+            // LOAD ================================================================
+            // Populate Database
+
+            // Efter att ha kört alla kvalitetskontroller och manuellt "rättat" datan, kan vi nu ladda in den i databasen.
+            // I en "riktig" app skulle vi ha en process för att "rätta" datan automatiskt, innan den laddas in i databasen.
+
+            // Hämta Customers
+            var loadCustomersCleaned = new LoadInitialData();
+
+            var filepathCustomersCleaned = "..\\..\\..\\OriginalDataInExcel\\CustomersCleaned.csv";
+            var customersCleaned = loadCustomers.ReadCustomers(filepathCustomersCleaned);
+
+            // Hämta Orders
+            var filepathOrdersCleaned = "..\\..\\..\\OriginalDataInExcel\\OrdersCleaned.csv";
+            var ordersCleaned = loadCustomers.ReadOrders(filepathOrdersCleaned);
+
+            using (var dbContext = new AppDbContext(options.Options))
+            {
+                var dataInitiaizer = new DataInitializer();
+                dataInitiaizer.PopulateDatabase(dbContext, customersCleaned, ordersCleaned);
+            }
         }
     }
 }

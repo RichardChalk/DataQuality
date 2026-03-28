@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataQuality.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260327092430_Initial migration")]
+    [Migration("20260328061100_Initial migration")]
     partial class Initialmigration
     {
         /// <inheritdoc />
@@ -26,15 +26,18 @@ namespace DataQuality.Migrations
 
             modelBuilder.Entity("DataQuality.Models.Customer", b =>
                 {
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("SQLId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SQLId"));
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -56,18 +59,18 @@ namespace DataQuality.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CustomerId");
+                    b.HasKey("SQLId");
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("DataQuality.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("SQLId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SQLId"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -87,6 +90,9 @@ namespace DataQuality.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ShippingAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -95,7 +101,7 @@ namespace DataQuality.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("SQLId");
 
                     b.HasIndex("CustomerId");
 
